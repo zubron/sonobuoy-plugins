@@ -1,0 +1,16 @@
+sonobuoy-config:
+  driver: Job
+  plugin-name: who-can
+  result-format: raw
+spec:
+  command:
+  - /bin/sh
+  args:
+  - -c
+  - /who-can-runner > /tmp/results/who-can-report ; echo -n /tmp/results/who-can-report > /tmp/results/done
+  image: zubron/who-can:demo
+  name: plugin
+  resources: {}
+  volumeMounts:
+  - mountPath: /tmp/results
+    name: results
