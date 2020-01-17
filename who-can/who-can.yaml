@@ -7,7 +7,7 @@ spec:
   - /bin/sh
   args:
   - -c
-  - /who-can-runner > /tmp/results/who-can-report ; echo -n /tmp/results/who-can-report > /tmp/results/done
+  - /who-can-runner | /jq . > /tmp/results/who-can-report.json ; echo -n /tmp/results/who-can-report.json > /tmp/results/done
   image: zubron/who-can:demo
   name: plugin
   resources: {}
