@@ -7,11 +7,14 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/vmware-tanzu/sonobuoy-plugins/who-can/runner/pkg/whocan"
+	"gopkg.in/yaml.v2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	clioptions "k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/kubernetes"
 )
+
+const whoCanConfigEnv = "WHO_CAN_CONFIG"
 
 func createClient(configFlags clioptions.ConfigFlags) (*kubernetes.Clientset, error) {
 	clientConfig, err := configFlags.ToRESTConfig()
@@ -60,18 +63,35 @@ func getAPIResources(client *kubernetes.Clientset) ([]metav1.APIResource, error)
 	return resources, nil
 }
 
+type WhoCanConfig struct {
+	Namespaces []string `yaml:"namespaces"`
+}
+
+func loadWhoCanConfig() (WhoCanConfig, error) {
+	config := os.Getenv(whoCanConfigEnv)
+	wcc := WhoCanConfig{}
+	if config == "" {
+		return wcc, nil
+	}
+
+	if err := yaml.Unmarshal([]byte(config), &wcc); err != nil {
+		return wcc, err
+	}
+	return wcc, nil
+}
+
 func main() {
+	wcc, err := loadWhoCanConfig()
+	if err != nil {
+		fmt.Printf("unable to load config: %v\n", err)
+		os.Exit(1)
+	}
+
 	var configFlags clioptions.ConfigFlags
 
 	client, err := createClient(configFlags)
 	if err != nil {
 		fmt.Printf("unable to create Kubernetes client: %v\n", err)
-		os.Exit(1)
-	}
-
-	wc, err := whocan.NewWhoCanClient(&configFlags, client)
-	if err != nil {
-		fmt.Printf("unable to create who-can client: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -83,15 +103,27 @@ func main() {
 
 	results := []whocan.Result{}
 
-	for _, resource := range resources {
-		for _, verb := range resource.Verbs {
-			r, err := wc.Run(resource.Name, verb)
-			if err != nil {
-				fmt.Printf("error running who-can query: %v\n", err)
-				os.Exit(1)
-			}
-			results = append(results, r)
+	namespaces := []string{"default", "kube-system"}
+	namespaces = append(namespaces, wcc.Namespaces...)
+
+	for _, namespace := range namespaces {
+		configFlags.Namespace = &namespace
+		wc, err := whocan.NewWhoCanClient(&configFlags, client)
+		if err != nil {
+			fmt.Printf("unable to create who-can client: %v\n", err)
+			os.Exit(1)
 		}
+		for _, resource := range resources {
+			for _, verb := range resource.Verbs {
+				r, err := wc.Run(resource.Name, verb, namespace)
+				if err != nil {
+					fmt.Printf("error running who-can query: %v\n", err)
+					os.Exit(1)
+				}
+				results = append(results, r)
+			}
+		}
+
 	}
 
 	j, err := json.Marshal(results)

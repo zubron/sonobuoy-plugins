@@ -14,3 +14,9 @@ spec:
   volumeMounts:
   - mountPath: /tmp/results
     name: results
+  env:
+  - name: WHO_CAN_CONFIG
+    value: |
+      namespaces:
+        - sonobuoy
+        - "*"

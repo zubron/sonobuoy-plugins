@@ -224,13 +224,12 @@ github.com/stretchr/testify v1.4.0 h1:2E4SXV/wtOkTonXsotYi4li6zVWxYlZuYNCXe9XRJy
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8/go.mod h1:VFNgLljTbGfSG7qAOspJ7OScBnGdDN/yBr0sguwnwf0=
-github.com/vmware-tanzu/sonobuoy-plugins v0.0.0-20191203012254-3b8f824f8242 h1:fM1Ojmi7NQ/07P/t8bQA8JBsTJ3TGFUStds1lghxVPE=
 github.com/xiang90/probing v0.0.0-20160813154853-07dd2e8dfe18/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
-github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200110220137-10976eeeb8ff h1:h0pJi0WghMpsK43IZMObxhBtHidaKiJM75bKwU0tu2o=
-github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200110220137-10976eeeb8ff/go.mod h1:j+xOunI0B8kD2isul96e4PksMn+cyP9f5jXt4KlnEds=
 github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200117170103-4b6d42e10349 h1:xsGnau/lQ8fwjhq0ED+OoJh3CgJoEh2ineoRiiX+TvI=
 github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200117170103-4b6d42e10349/go.mod h1:j+xOunI0B8kD2isul96e4PksMn+cyP9f5jXt4KlnEds=
+github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200120213118-0d586c676a9f h1:FndYd4VS4Ij+67IvrwSa2WtlltEAd+n6ArPGcRcGF9M=
+github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200120213118-0d586c676a9f/go.mod h1:j+xOunI0B8kD2isul96e4PksMn+cyP9f5jXt4KlnEds=
 go.uber.org/atomic v0.0.0-20181018215023-8dc6146f7569/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=
 go.uber.org/multierr v0.0.0-20180122172545-ddea229ff1df/go.mod h1:wR5kodmAFQ0UK8QlbwjlSNy0Z68gJhDJUG5sjR94q/0=
 go.uber.org/zap v0.0.0-20180814183419-67bc79d13d15/go.mod h1:vwi/ZaCAaUcBkycHslxD9B2zi4UTXhF60s6SWpuDF0Q=

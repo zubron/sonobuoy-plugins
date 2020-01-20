@@ -23,6 +23,7 @@ type ClusterRoleBindings []rbac.ClusterRoleBinding
 type Result struct {
 	Resource            string `json:"resource"`
 	Verb                string `json:"verb"`
+	Namespace           string `json:"namespace"`
 	RoleBindings        `json:"role-bindings"`
 	ClusterRoleBindings `json:"cluster-role-bindings"`
 }
@@ -75,22 +76,25 @@ func (crbs ClusterRoleBindings) MarshalJSON() ([]byte, error) {
 func createArguments(resource, verb string) []string {
 	// Determine if the resource type is a subresource based on the name form resource/subresource.
 	// If the resource begins with "/", leave as is as a non-resource URL, otherwise attempt to split.
-	var resourceArgs []string
+	cmdArgs := []string{verb}
 	if strings.HasPrefix(resource, "/") {
-		resourceArgs = append(resourceArgs, resource)
+		cmdArgs = append(cmdArgs, resource)
 	} else {
 		resourceTokens := strings.SplitN(resource, "/", 2)
-		resourceArgs = append(resourceArgs, resourceTokens[0])
+		cmdArgs = append(cmdArgs, resourceTokens[0])
 		if len(resourceTokens) > 1 {
-			resourceArgs = append(resourceArgs, "--subresource", resourceTokens[1])
+			cmdArgs = append(cmdArgs, "--subresource", resourceTokens[1])
 		}
 	}
-	return append([]string{verb}, resourceArgs...)
+	return cmdArgs
 }
 
 // Run runs a who-can query for the given resource and verb.
-func (c *Client) Run(resource, verb string) (Result, error) {
+func (c *Client) Run(resource, verb, namespace string) (Result, error) {
 	args := createArguments(resource, verb)
+	if namespace == "*" {
+		c.wc.AllNamespaces = true
+	}
 
 	if err := c.wc.Complete(args); err != nil {
 		return Result{}, errors.Wrap(err, "complete")
@@ -105,6 +109,7 @@ func (c *Client) Run(resource, verb string) (Result, error) {
 	return Result{
 		Resource:            resource,
 		Verb:                verb,
+		Namespace:           namespace,
 		RoleBindings:        rbs,
 		ClusterRoleBindings: crbs,
 	}, nil

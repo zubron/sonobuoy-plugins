@@ -12,10 +12,11 @@ require (
 	golang.org/x/net v0.0.0-20190827160401-ba9fcec4b297 // indirect
 	golang.org/x/sys v0.0.0-20200107162124-548cf772de50 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
+	gopkg.in/yaml.v2 v2.2.2
 	k8s.io/api v0.0.0-20190829034738-40d3837b7e3d
 	k8s.io/apimachinery v0.0.0-20190828114620-4147c925140e
 	k8s.io/cli-runtime v0.0.0-20190612131021-ced92c4c4749
 	k8s.io/client-go v0.0.0-20190704045512-07281898b0f0
 )
 
-replace github.com/aquasecurity/kubectl-who-can => github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200117170103-4b6d42e10349
+replace github.com/aquasecurity/kubectl-who-can => github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200120213118-0d586c676a9f
