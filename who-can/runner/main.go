@@ -103,7 +103,8 @@ func main() {
 
 	results := []whocan.Result{}
 
-	namespaces := []string{"default", "kube-system"}
+	// Include the empty string so that queries against the default namespace are performed
+	namespaces := []string{""}
 	namespaces = append(namespaces, wcc.Namespaces...)
 
 	for _, namespace := range namespaces {

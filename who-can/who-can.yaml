@@ -18,5 +18,5 @@ spec:
   - name: WHO_CAN_CONFIG
     value: |
       namespaces:
-        - sonobuoy
+        - kube-system
         - "*"
