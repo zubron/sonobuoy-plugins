@@ -15,7 +15,7 @@ The plugin definition currently includes the `kube-system` namespace and "all na
 To run this plugin, run the following command:
 
 ```
-sonobuoy run --plugin https://raw.githubusercontent.com/zubron/sonobuoy-plugins/who-can/who-can/who-can.yaml
+sonobuoy run --plugin https://raw.githubusercontent.com/zubron/sonobuoy-plugins/who-can-subjects/who-can/who-can.yaml
 ```
 
 The plugin status can be checked using the command:
@@ -35,57 +35,34 @@ This command will return the name of the results tarball.
 The report from the plugin can be found in the tarball at the path `plugins/who-can/results/global/who-can-report.json`.
 
 ## Report format
-The plugin produces a JSON file which includes the result of all queries performed in the following format:
+The plugin produces a JSON file which includes details of all subjects found in the system and what they have permissions to do:
 
 ```
   {
-    "resource": "pods",
-    "verb": "list",
-    "namespace": "default",
-    "role-bindings": [
+    "kind": "ServiceAccount",
+    "name": "kube-controller-manager",
+    "namespace": "kube-system",
+    "permissions": [
       {
-        "name": "podlister-rb",
-        "type": "User",
-        "subject": "test-user",
-        "namespace": "default"
-      },
-      {
-        "name": "podlister-rb",
-        "type": "Group",
-        "subject": "test-group",
-        "namespace": "default"
-      }
-    ],
-    "cluster-role-bindings": [
-      {
-        "name": "cluster-admin",
-        "type": "Group",
-        "subject": "system:masters"
-      },
-      {
-        "name": "system:controller:attachdetach-controller",
-        "type": "ServiceAccount",
-        "subject": "attachdetach-controller",
-        "sa-namespace": "kube-system"
-      },
-      {
-        "name": "system:controller:cronjob-controller",
-        "type": "ServiceAccount",
-        "subject": "cronjob-controller",
-        "sa-namespace": "kube-system"
-      },
-      {
-        "name": "system:kube-scheduler",
-        "type": "User",
-        "subject": "system:kube-scheduler"
+        "namespace": "kube-system",
+        "resources": [
+          {
+            "name": "configmaps",
+            "verbs": [
+              {
+                "name": "watch",
+                "roleBindings": [
+                  "system::leader-locking-kube-controller-manager"
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   }
-
 ```
 
-The above obehct shows that the query checked who can `list pods` in the default namespace.
-The `role-bindings` and `cluster-role-bindings` show the subjects that can perform those actions as a result of those bindings.
-For example, the User subject `test-user` can list pods in the `default` namespace.
-The bindings also show which namespace they belong to.
-For example, the `podlister-rb` RoleBinding was created in the `default` namespace, however the `system:controller:cronjob-controller` ClusterRoleBinding was created in the `kube-system` namespace.
+The above object shows details for the ServiceAccount `kube-controller-manager` which exists in the `kube-system` namespace.
+This ServiceAccount has permissions in the `kube-system` namespace to perform the `watch` verb on `configmaps`.
+This permission is given by the `system::leader-locking-kube-controller-manager` RoleBinding.

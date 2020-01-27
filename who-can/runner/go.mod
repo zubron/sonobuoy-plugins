@@ -19,4 +19,4 @@ require (
 	k8s.io/client-go v0.0.0-20190704045512-07281898b0f0
 )
 
-replace github.com/aquasecurity/kubectl-who-can => github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200120213118-0d586c676a9f
+replace github.com/aquasecurity/kubectl-who-can => github.com/zubron/kubectl-who-can v0.1.0-beta.2.0.20200205203301-6e803e39a2da
